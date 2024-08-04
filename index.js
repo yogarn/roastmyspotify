@@ -8,7 +8,7 @@ require("dotenv").config();
 
 const spotify_client_id = process.env.SPOTIFY_CLIENT_ID;
 const spotify_client_secret = process.env.SPOTIFY_CLIENT_SECRET;
-const redirect_uri = "http://localhost:8888/callback";
+const redirect_uri = process.env.SPOTIFY_CALLBACK;
 
 const app = express();
 app.use(cookieParser());
