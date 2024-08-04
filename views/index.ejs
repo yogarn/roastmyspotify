@@ -11,9 +11,13 @@
             min-height: 100vh;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+        }
+        .content {
+            flex: 1;
+            padding: 20px;
         }
         footer {
-            margin-top: auto;
             padding: 10px;
             text-align: center;
             background-color: #f0f0f0;
@@ -21,8 +25,10 @@
     </style>
 </head>
 <body>
-    <h1>Roast My Spotify Profile</h1>
-    <p><%= roast %></p>
+    <div class="content">
+        <h1>Roast My Spotify Profile</h1>
+        <p><%= roast %></p>
+    </div>
     <footer>
         Made with ❤️ by yogarn
     </footer>
