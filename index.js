@@ -3,6 +3,7 @@ const axios = require("axios");
 const querystring = require("querystring");
 const cookieParser = require("cookie-parser");
 const crypto = require("crypto");
+const path = require("path");
 
 require("dotenv").config();
 
@@ -12,6 +13,7 @@ const redirect_uri = process.env.SPOTIFY_CALLBACK;
 
 const app = express();
 app.use(cookieParser());
+app.set('views', path.join(__dirname, 'views'));
 app.set("view engine", "ejs");
 
 const stateKey = "spotify_auth_state";
@@ -179,6 +181,9 @@ app.get("/", async (req, res) => {
     const userProfile = await getUserProfile(access_token);
 
     const roast = await fetchGeminiRoast({ userProfile, trackArtistPairs });
+    
+    // TODO: remove this line
+    console.log(roast);
 
     res.render("index", { roast });
   } catch (error) {
