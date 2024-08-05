@@ -4,6 +4,7 @@ const querystring = require("querystring");
 const cookieParser = require("cookie-parser");
 const crypto = require("crypto");
 const path = require("path");
+const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 require("dotenv").config();
 
@@ -13,7 +14,7 @@ const redirect_uri = process.env.SPOTIFY_CALLBACK;
 
 const app = express();
 app.use(cookieParser());
-app.set('views', path.join(__dirname, 'views'));
+app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
 const stateKey = "spotify_auth_state";
@@ -61,34 +62,24 @@ async function fetchGeminiRoast({ userProfile, trackArtistPairs }) {
     .map((pair) => `${pair.trackName} by ${pair.artistName}`)
     .join(", ");
 
-  const roastOptions = {
-    url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
-    method: "post",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    data: {
-      contents: [
-        {
-          parts: [
-            {
-              text: `roast profile spotify dengan nama ${userProfile} berdasarkan listening history secara langsung tanpa newline sebanyak 2 paragraf dalam bahasa indonesia gaul: ${formattedTracks}`,
-            },
-          ],
-        },
-      ],
-    },
-  };
+  const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+  const prompt = `roast profile spotify dengan nama ${userProfile} berdasarkan listening history secara langsung tanpa newline sebanyak 2 paragraf dalam bahasa indonesia gaul: ${formattedTracks}`;
 
   try {
-    const roastResponse = await axios(roastOptions);
-    return roastResponse.data.candidates[0].content.parts[0].text;
+    const result = await model.generateContent(prompt);
+
+    if (result.response.candidates.length === 0) {
+      throw new Error("No response from model");
+    }
+
+    return result.response.candidates[0].content.parts[0].text;
   } catch (error) {
     console.error(
       "Error fetching roast",
       error.response ? error.response.data : error.message
     );
-    throw error;
   }
 }
 
@@ -164,7 +155,7 @@ app.get("/callback", async (req, res) => {
   }
 });
 
-app.get("/", async (req, res) => {
+app.get("/roast", async (req, res) => {
   const access_token = req.cookies.spotify_access_token;
 
   if (!access_token) {
@@ -181,15 +172,19 @@ app.get("/", async (req, res) => {
     const userProfile = await getUserProfile(access_token);
 
     const roast = await fetchGeminiRoast({ userProfile, trackArtistPairs });
-    
+
     // TODO: remove this line
     console.log(roast);
 
-    res.render("index", { roast });
+    res.render("roast", { roast });
   } catch (error) {
     console.error("Error roasting your spotify profile:", error);
-    res.send("Error roasting your spotify profile.");
+    res.send("Error roasting your spotify profile. Try to refresh the page");
   }
+});
+
+app.get("/", (req, res) => {
+  res.render("index");
 });
 
 app.listen(8888, () => {
