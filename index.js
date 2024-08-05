@@ -139,7 +139,7 @@ app.get("/callback", async (req, res) => {
 
       res.cookie("spotify_access_token", access_token);
 
-      res.redirect("/");
+      res.redirect("/roast");
     } catch (error) {
       console.error(
         "Error fetching access token or recently played tracks",
@@ -171,7 +171,11 @@ app.get("/roast", async (req, res) => {
     }));
     const userProfile = await getUserProfile(access_token);
 
-    const roast = await fetchGeminiRoast({ userProfile, trackArtistPairs });
+    let roast = await fetchGeminiRoast({ userProfile, trackArtistPairs });
+
+    while(roast === undefined) {
+      roast = await fetchGeminiRoast({ userProfile, trackArtistPairs });
+    }
 
     // TODO: remove this line
     console.log(roast);
