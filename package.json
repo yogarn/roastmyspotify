@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/yogarn/roastmyspotify#readme",
   "dependencies": {
+    "@google/generative-ai": "^0.16.0",
     "axios": "^1.7.3",
     "cookie-parser": "^1.4.6",
     "crypto": "^1.0.1",
