@@ -2,29 +2,81 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   </head>
   <style>
-        
     body {
+      align-items: center;
+      justify-content: center;
       display: flex;
       flex-direction: column;
       min-height: 100vh;
       margin: 0;
-      padding: 0; 
+      padding: 0;
       box-sizing: border-box;
-      background-color: #FFFDF9;
+      background-color: #fffdf9;
       font-family: "Plus Jakarta Sans", sans-serif;
     }
-
-    .content {
-      flex: 1;
-      padding: 20px;
+    textarea {
+      font-family: "Plus Jakarta Sans", sans-serif;
+      width: 75%;
+      background-color: #eeeeee;
+      border: rgb(92, 92, 92) 1px solid;
+      padding: 8px;
+      overflow: hidden;
+      resize: none;
+      text-align: justify;
+      box-sizing: border-box;
     }
-    
-</style>
+    .content {
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 75%;
+      text-align: center;
+    }
+    .header {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .header img {
+      padding-right: 4px;
+    }
+  </style>
   <body>
     <div class="content">
-      <h1>Roast Result</h1>
-      <p><%= roast %></p>
+      <div class="header">
+        <a href="/">
+          <img src="/img/ep_back.svg" width:"24px", height="24px" alt="back"></a
+        >
+        <h1>Roast Result</h1>
+      </div>
+
+      <!-- TODO: add content here -->
+
+      <textarea id="result">
+          <%= roast %>
+        </textarea
+      >
+      <script>
+        const textarea = document.getElementById("result");
+
+        // Function to auto-resize textarea based on content
+        function autoResizeTextarea() {
+          textarea.style.height = "auto"; // Reset the height
+          textarea.style.height = textarea.scrollHeight + "px"; // Set the height to match the content
+        }
+
+        // Initialize the height based on content
+        autoResizeTextarea();
+
+        // Add an event listener to adjust height on input
+        textarea.addEventListener("input", autoResizeTextarea);
+      </script>
+    </div>
   </body>
 </html>
