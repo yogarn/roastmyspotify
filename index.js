@@ -14,7 +14,10 @@ const redirect_uri = process.env.SPOTIFY_CALLBACK;
 
 const app = express();
 app.use(cookieParser());
+
 app.set("views", path.join(__dirname, "views"));
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.set("view engine", "ejs");
 
 const stateKey = "spotify_auth_state";
