@@ -183,7 +183,7 @@ app.get("/roast", async (req, res) => {
     res.render("roast", { roast });
   } catch (error) {
     console.error("Error roasting your spotify profile:", error);
-    res.send("Error roasting your spotify profile. Try to refresh the page");
+    res.redirect("/login"); // if error, then something is wrong with spotify access token
   }
 });
 
