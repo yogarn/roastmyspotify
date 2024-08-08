@@ -186,7 +186,7 @@ app.get("/roast", async (req, res) => {
     res.render("roast", { roast });
   } catch (error) {
     console.error("Error roasting your spotify profile:", error);
-    res.redirect("/login"); // if error, then something is wrong with spotify access token
+    res.send("Error roasting your spotify profile. Try to refresh the page");
   }
 });
 
