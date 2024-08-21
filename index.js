@@ -3,7 +3,7 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 require("dotenv").config();
 
-const { router } = require("./handler/handler");
+const { router } = require("./router/handler");
 
 const app = express();
 app.use(cookieParser());
