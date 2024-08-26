@@ -18,7 +18,8 @@ Rename `.env.example` to `.env`
 ```
 mv .env.example .env
 ```
-Obtain Gemini API key and Spotify API key and put it in the `.env` file
+Obtain Gemini API key and Spotify API key and put it in the `.env` file  
+
 4. Run
 ```
 npm run start
